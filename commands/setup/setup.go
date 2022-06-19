@@ -52,13 +52,8 @@ func Setup(envPath string, dev bool) (err error) {
 		return err
 	}
 
-	binPath := filepath.Join(envPath, "bin")
+	binPath := filepath.Join(envPath, "Scripts")
 	os.Setenv("PATH", fmt.Sprintf("%s%c%s", binPath, os.PathListSeparator, os.Getenv("PATH")))
-	if err != nil {
-		return err
-	}
-
-	err = os.Chdir(envPath)
 	if err != nil {
 		return err
 	}
@@ -68,6 +63,11 @@ func Setup(envPath string, dev bool) (err error) {
 		fmt.Println(err.Error())
 		err = nil
 		// Don't return - we can still try to set up the Lisp compiler
+	}
+
+	err = os.Chdir(envPath)
+	if err != nil {
+		return err
 	}
 
 	err = setupLisp(envPath, dev)
@@ -100,7 +100,7 @@ func setupPython(envPath string, dev bool) (err error) {
 
 	// Upgrade pip
 	fmt.Println("> Upgrading pip...")
-	output, err := executil.ExecCommand("pip", "install", "--upgrade", "pip", "wheel")
+	output, err := executil.ExecCommand("pip", "install", "wheel")
 	if err != nil {
 		return
 	}
@@ -117,7 +117,7 @@ func setupPython(envPath string, dev bool) (err error) {
 
 	output, err = executil.ExecCommand(
 		"pip", "install", "-r",
-		fmt.Sprintf("../install/%s", requirementsFile),
+		fmt.Sprintf("./install/%s", requirementsFile),
 	)
 	if err != nil {
 		return

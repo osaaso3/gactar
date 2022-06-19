@@ -30,7 +30,7 @@ func GetExecutableName() (exeName string, err error) {
 		exeName = "lx86cl64"
 
 	case "windows":
-		exeName = "wx86cl64.exe"
+		exeName = "wx86cl64"
 
 	default:
 		err = &ErrCCLSystem{OSName: runtime.GOOS, OSArch: runtime.GOARCH}
